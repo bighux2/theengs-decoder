@@ -26,7 +26,8 @@ setup(
     author='Theengs',
     license=" GPL-3.0 License",
     packages=['TheengsDecoder'],
-    use_scm_version={"root": "..", "version_scheme": "no-guess-dev"},
+   # use_scm_version={"root": "..", "version_scheme": "no-guess-dev"},
     setup_requires=setup_requires,
     include_package_data=True,
+    version="1.8.65",
 )
