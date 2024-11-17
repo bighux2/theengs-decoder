@@ -122,7 +122,7 @@
 #include "devices/SBHT_003C_json.h"
 #include "devices/SBHT_003C_ENCR_json.h"
 #include "devices/BEEWIBBW200_json.h"
-
+#include "devices/WISER_ODACE_json.h"
 
 const char* _devices[][2] = {
     {_HHCCJCY01HHCC_json, _HHCCJCY01HHCC_json_props},
@@ -251,4 +251,5 @@ const char* _devices[][2] = {
     {_SBHT_003C_json, _SBHT_003C_json_props},
     {_SBHT_003C_ENCR_json, _SBHT_003C_ENCR_json_props},
     {_BEEWIBBW200_json, _BEEWIBBW200_json_props},
+    {_WISER_ODACE_json, _WISER_ODACE_json_props}
 };

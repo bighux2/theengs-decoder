@@ -172,6 +172,7 @@ public:
     SBHT_003C,
     SBHT_003C_ENCR,
     BEEWIBBW200,
+    WISER_ODACE,
     BLE_ID_MAX
   };
 
