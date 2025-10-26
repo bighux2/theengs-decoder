@@ -6,9 +6,9 @@ on:
 jobs:
   build-n-publish:
     name: Build and publish distributions to PyPI
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0  # deep clone for setuptools-scm
@@ -19,11 +19,12 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip3 install setuptools setuptools_scm cmake wheel scikit-build ninja
-    - name: Build a source tarball
+    - name: Build distributions
       run: |
         cd python
         cp -r ../src .
         python3 setup.py sdist
+        cd ..
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:

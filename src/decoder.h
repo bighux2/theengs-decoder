@@ -50,6 +50,7 @@ public:
     LYWSD02,
     LYWSDCGQ,
     CGP1W,
+    CGP22C,
     CGP23W,
     CGG1_STOCK,
     CGG1_ATC1441,
@@ -62,6 +63,7 @@ public:
     CGDK2_ATC1441,
     CGH1,
     JQJCY01YM,
+    IBS_P02B,
     IBSTHBP01B,
     IBT_2X,
     IBT_2XS,
@@ -73,12 +75,16 @@ public:
     XMTZC05HMKG,
     XMTZC05HMLB,
     TPMS,
+    TPMSBR,
     KKM_K6P,
     KKM_K9,
     LYWSD03MMC_ATC,
     LYWSD03MMC_PVVX,
     LYWSD03MMC_PVVX_DECR,
+    LYWSD03MMC_PVVX_BTHOME,
     LYWSD03MMC_PVVX_ENCR,
+    LYWSD03MMC_PVVX_BTHOME_1_ENCR,
+    LYWSD03MMC_PVVX_BTHOME_2_ENCR,
     CGPR1,
     THERMOBEACON,
     H5055,
@@ -87,11 +93,13 @@ public:
     H5102,
     H5106,
     H5179,
+    H5179_N,
     HHCCJCY10,
     MUE4094RT,
     NODONNIU,
     MOKOBEACON,
     MOKOBEACONXPRO,
+    TGBT5,
     INODEEM,
     RUUVITAG_RAWV1,
     RUUVITAG_RAWV2,
@@ -101,6 +109,7 @@ public:
     SBMS,
     SBMT,
     SBMT_M,
+    SBMP,
     SBOT,
     SBOT_M,
     SBOT_S,
@@ -115,11 +124,13 @@ public:
     BM3IN1,
     BM4IN1,
     MS_CDP,
+    ECOFLOW_ADV,
     FEASY,
     GAEN,
     HHCCPOT002,
     HOBOMX2001,
     BPARASITE,
+    BPARASITEV2,
     BWBSDOO,
     BM2,
     BM6,
@@ -138,6 +149,7 @@ public:
     MOPEKA,
     T201,
     T301,
+    THB1,
     NUT,
     NUTALE,
     ITAG,
@@ -154,10 +166,19 @@ public:
     APPLEAIRPODS,
     APPLEWATCH,
     APPLEDEVICE,
+    HOLYIOT,
     IBEACON,
     APPLE_CONT,
     APPLE_CONTAT,
+    SPHTP,
+    SPHT,
     SERVICE_DATA,
+    UT363BT,
+    VICTRON_ENCR,
+    VICTBSC,
+    VICTORIONXS,
+    VICTSBP,
+    VICTSBS,
     SE_RHT,
     SE_TEMP,
     SE_TPROBE,
@@ -173,6 +194,7 @@ public:
     SBHT_003C_ENCR,
     BEEWIBBW200,
     WISER_ODACE,
+    VCH6003,
     BLE_ID_MAX
   };
 
@@ -184,14 +206,14 @@ private:
   bool        data_length_is_valid(size_t data_len, size_t default_min, const JsonArray& condition, int *idx);
   uint8_t     getBinaryData(char ch);
   bool        evaluateDatalength(std::string op, size_t data_len, size_t req_len);
-  bool        checkPropCondition(const JsonArray& prop, const char* svc_data, const char* mfg_data);
+  bool        checkPropCondition(const JsonArray& prop, const char* svc_data, const char* mfg_data, const char* dev_name);
   bool        checkDeviceMatch(const JsonArray& condition, const char* svc_data, const char* mfg_data,
                                const char* dev_name, const char* svc_uuid, const char* mac_id);
   std::string sanitizeJsonKey(const char* key_in);
 
-  size_t m_docMax = 12000;
-  size_t m_minSvcDataLen = 20;
-  size_t m_minMfgDataLen = 16;
+  size_t m_docMax = 12200;
+  size_t m_minSvcDataLen = 4;
+  size_t m_minMfgDataLen = 10;
 };
 
 #endif

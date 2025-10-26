@@ -25,8 +25,10 @@
 #include "devices/CGDN1_json.h"
 #include "devices/CGH1_json.h"
 #include "devices/CGP1W_json.h"
+#include "devices/CGP22C_json.h"
 #include "devices/CGP23W_json.h"
 #include "devices/CGPR1_json.h"
+#include "devices/ECOFLOW_ADV_json.h"
 #include "devices/FEASY_json.h"
 #include "devices/GAEN_json.h"
 #include "devices/H5055_json.h"
@@ -39,6 +41,7 @@
 #include "devices/HHCCJCY01HHCC_json.h"
 #include "devices/HHCCPOT002_json.h"
 #include "devices/HOBOMX2001_json.h"
+#include "devices/IBS_P02B_json.h"
 #include "devices/IBS_THBP01B_json.h"
 #include "devices/IBT_2X_json.h"
 #include "devices/IBT_4XS_json.h"
@@ -58,6 +61,7 @@
 #include "devices/XMTZC05HMKG_json.h"
 #include "devices/XMTZC05HMLB_json.h"
 #include "devices/Mokobeacon_json.h"
+#include "devices/Mikrotik_json.h"
 #include "devices/RDL52832_json.h"
 #include "devices/RuuviTag_RAWv1_json.h"
 #include "devices/RuuviTag_RAWv2_json.h"
@@ -66,6 +70,7 @@
 #include "devices/SBCU_json.h"
 #include "devices/SBMS_json.h"
 #include "devices/SBMT_json.h"
+#include "devices/SBMP_json.h"
 #include "devices/SBOT_json.h"
 #include "devices/SBS1_json.h"
 #include "devices/SHT4X_json.h"
@@ -73,6 +78,7 @@
 #include "devices/Skale_json.h"
 #include "devices/SmartDry_json.h"
 #include "devices/TPMS_json.h"
+#include "devices/TPMSBR_json.h"
 #include "devices/KKM_K6P_json.h"
 #include "devices/KKM_K9_json.h"
 #include "devices/ThermoBeacon_json.h"
@@ -89,6 +95,7 @@
 #include "devices/Mopeka_json.h"
 #include "devices/T201_json.h"
 #include "devices/T301_json.h"
+#include "devices/THB1_json.h"
 #include "devices/tracker_json.h"
 #include "devices/iNodeEM_json.h"
 #include "devices/ARANET4_json.h"
@@ -97,6 +104,7 @@
 #include "devices/BM3IN1_json.h"
 #include "devices/BM4IN1_json.h"
 #include "devices/BPARASITE_json.h"
+#include "devices/BPARASITEV2_json.h"
 #include "devices/BWBSDOO_json.h"
 #include "devices/BM2_json.h"
 #include "devices/BM6_json.h"
@@ -105,9 +113,18 @@
 #include "devices/APPLEAIRPODS_json.h"
 #include "devices/APPLEWATCH_json.h"
 #include "devices/APPLEDEVICE_json.h"
+#include "devices/HOLYIOT_json.h"
 #include "devices/iBeacon_json.h"
 #include "devices/APPLE_json.h"
+#include "devices/SensorP_HTP_json.h"
+#include "devices/SensorP_HT_json.h"
 #include "devices/ServiceData_json.h"
+#include "devices/UT363BT_json.h"
+#include "devices/VICTRON__ENCR_json.h"
+#include "devices/VICTRON_BSC_json.h"
+#include "devices/VICTRON_ORIONXS_json.h"
+#include "devices/VICTRON_SBP_json.h"
+#include "devices/VICTRON_SBS_json.h"
 #include "devices/SE_RHT_json.h"
 #include "devices/SE_TEMP_json.h"
 #include "devices/SE_TPROBE_json.h"
@@ -123,12 +140,14 @@
 #include "devices/SBHT_003C_ENCR_json.h"
 #include "devices/BEEWIBBW200_json.h"
 #include "devices/WISER_ODACE_json.h"
+#include "devices/VCH6003_json.h"
 
 const char* _devices[][2] = {
     {_HHCCJCY01HHCC_json, _HHCCJCY01HHCC_json_props},
     {_LYWSD02_json, _LYWSD02_json_props},
     {_LYWSDCGQ_json, _LYWSDCGQ_json_props},
     {_CGP1W_json, _CGP1W_json_props},
+    {_CGP22C_json, _CGP22C_json_props},
     {_CGP23W_json, _CGP23W_json_props},
     {_CGG1_json_STOCK, _CGG1_json_props},
     {_CGG1_json_ATC1441, _CGG1_json_props},
@@ -141,6 +160,7 @@ const char* _devices[][2] = {
     {_CGDK2_json_ATC1441, _CGDK2_json_props},
     {_CGH1_json, _CGH1_json_props},
     {_JQJCY01YM_json, _JQJCY01YM_json_props},
+    {_IBS_P02B_json, _IBS_P02B_json_props},
     {_IBS_THBP01B_json, _IBS_THBP01B_json_props},
     {_IBT_2X_json_2X, _IBT_2X_json_props},
     {_IBT_2X_json_2XS, _IBT_2X_json_props},
@@ -152,12 +172,16 @@ const char* _devices[][2] = {
     {_XMTZC05HMKG_json, _XMTZC05HMKG_json_props},
     {_XMTZC05HMLB_json, _XMTZC05HMLB_json_props},
     {_TPMS_json, _TPMS_json_props},
+    {_TPMSBR_json, _TPMSBR_json_props},
     {_KKM_K6P_json, _KKM_K6P_json_props},
     {_KKM_K9_json, _KKM_K9_json_props},
     {_LYWSD03MMC_json_ATC, _LYWSD03MMC_json_props},
     {_LYWSD03MMC_json_PVVX, _LYWSD03MMC_json_props},
     {_LYWSD03MMC_json_PVVX_DECR, _LYWSD03MMC_json_props},
+    {_LYWSD03MMC_json_PVVX_BTHOME, _LYWSD03MMC_BTHOME_json_props},
     {_LYWSD03MMC_ENCR_json_PVVX, _LYWSD03MMC_ENCR_json_props},
+    {_LYWSD03MMC_ENCR_json_PVVX_BTHOME_1, _LYWSD03MMC_ENCR_json_props},
+    {_LYWSD03MMC_ENCR_json_PVVX_BTHOME_2, _LYWSD03MMC_ENCR_json_props},
     {_CGPR1_json, _CGPR1_json_props},
     {_ThermoBeacon_json, _ThermoBeacon_json_props},
     {_H5055_json, _H5055_json_props},
@@ -166,11 +190,13 @@ const char* _devices[][2] = {
     {_H5102_json, _H5102_json_props},
     {_H5106_json, _H5106_json_props},
     {_H5179_json, _H5179_json_props},
+    {_H5179_json_N, _H5179_json_props},
     {_HHCCJCY10_json, _HHCCJCY10_json_props},
     {_MUE4094RT_json, _MUE4094RT_json_props},
     {_NODONNIU_json, _NODONNIU_json_props},
     {_Mokobeacon_json, _Mokobeacon_json_props},
     {_MBXPRO_json, _MBXPRO_json_props},
+    {_Mikrotik_json, _Mikrotik_json_props},
     {_iNodeEM_json, _iNodeEM_json_props},
     {_RuuviTag_RAWv1_json, _RuuviTag_RAWv1_json_props},
     {_RuuviTag_RAWv2_json, _RuuviTag_RAWv2_json_props},
@@ -180,6 +206,7 @@ const char* _devices[][2] = {
     {_SBMS_json, _SBMS_json_props},
     {_SBMT_json, _SBMT_json_props},
     {_SBMT_json_M, _SBMT_json_props},
+    {_SBMP_json, _SBMP_json_props},
     {_SBOT_json, _SBOT_json_props},
     {_SBOT_json_M, _SBOT_json_props},
     {_SBOT_json_S, _SBOT_json_props},
@@ -194,11 +221,13 @@ const char* _devices[][2] = {
     {_BM3IN1_json, _BM3IN1_json_props},
     {_BM4IN1_json, _BM4IN1_json_props},
     {_MS_CDP_json, _MS_CDP_json_props},
+    {_ECOFLOW_ADV_json, _ECOFLOW_ADV_json_props},
     {_FEASY_json, _FEASY_json_props},
     {_GAEN_json, _GAEN_json_props},
     {_HHCCPOT002_json, _HHCCPOT002_json_props},
     {_HOBOMX2001_json, _HOBOMX2001_json_props},
     {_BPARASITE_json, _BPARASITE_json_props},
+    {_BPARASITEV2_json, _BPARASITEV2_json_props},
     {_BWBSDOO_json, _BWBSDOO_json_props},
     {_BM2_json, _BM2_json_props},
     {_BM6_json, _BM6_json_props},
@@ -217,6 +246,7 @@ const char* _devices[][2] = {
     {_Mopeka_json, _Mopeka_json_props},
     {_T201_json, _T201_json_props},
     {_T301_json, _T301_json_props},
+    {_THB1_json, _THB1_json_props},
     {_tracker_json_nut, _tracker_json_props},
     {_tracker_json_nutale, _tracker_json_props},
     {_tracker_json_itag, _tracker_json_props},
@@ -233,10 +263,19 @@ const char* _devices[][2] = {
     {_APPLEAIRPODS_json, _APPLEAIRPODS_json_props},
     {_APPLEWATCH_json, _APPLEWATCH_json_props},
     {_APPLEDEVICE_json, _APPLEDEVICE_json_props},
+    {_HOLYIOT_json, _HOLYIOT_json_props},
     {_ibeacon_json, _ibeacon_json_props},
     {_APPLE_json, _APPLE_json_props},
     {_APPLE_json_at, _APPLE_json_props},
+    {_SensorPush_HTP_json, _SensorPush_HTP_json_props},
+    {_SensorPush_HT_json, _SensorPush_HT_json_props},
     {_ServiceData_json, _ServiceData_json_props},
+    {_UT363BT_json, _UT363BT_json_props},
+    {_VICTRON_ENCR_json, _VICTRON_ENCR_json_props},
+    {_VICTBSC_json, _VICTBSC_json_props},
+    {_VICTORIONXS_json, _VICTORIONXS_json_props},
+    {_VICTSBP_json, _VICTSBP_json_props},
+    {_VICTSBS_json, _VICTSBS_json_props},
     {_SE_RHT_json, _SE_RHT_json_props},
     {_SE_TEMP_json, _SE_TEMP_json_props},
     {_SE_TPROBE_json, _SE_TPROBE_json_props},
@@ -251,5 +290,6 @@ const char* _devices[][2] = {
     {_SBHT_003C_json, _SBHT_003C_json_props},
     {_SBHT_003C_ENCR_json, _SBHT_003C_ENCR_json_props},
     {_BEEWIBBW200_json, _BEEWIBBW200_json_props},
-    {_WISER_ODACE_json, _WISER_ODACE_json_props}
+    {_WISER_ODACE_json, _WISER_ODACE_json_props},
+    {_VCH6003_json, _VCH6003_json_props}
 };

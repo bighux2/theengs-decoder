@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.5)
 
-project(decoder VERSION 1.8.66)
+project(decoder VERSION 2.0.0)
 find_package(PythonExtensions REQUIRED)
 
 add_library(_decoder MODULE TheengsDecoder/_decoder.cpp src/decoder.cpp)

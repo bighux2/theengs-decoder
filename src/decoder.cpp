@@ -29,10 +29,13 @@
 #ifdef DEBUG_DECODER
 #  include <stdio.h>
 #  define DEBUG_PRINT(...) \
-    { printf(__VA_ARGS__); }
+    {                      \
+      printf(__VA_ARGS__); \
+    }
 #else
 #  define DEBUG_PRINT(...) \
-    {}
+    {                      \
+    }
 #endif
 
 #ifdef UNIT_TESTING
@@ -63,7 +66,7 @@ void TheengsDecoder::reverse_hex_data(const char* in, char* out, int l) {
     i -= 2;
     j += 2;
   }
-  out[l] = '\0';
+  out[j] = '\0';
 }
 
 double TheengsDecoder::bf_value_from_hex_string(const char* data_str,
@@ -103,11 +106,11 @@ double TheengsDecoder::value_from_hex_string(const char* data_str,
     DEBUG_PRINT("extracted value from %s = %lld\n", data.c_str(), (long long)value);
   } else {
     union {
-      long longV;
+      long long longV;
       float floatV;
     };
-    longV = strtol(data.c_str(), NULL, 16);
-    DEBUG_PRINT("extracted float value from %s = %f\n", data.c_str(), floatV);
+    longV = strtoll(data.c_str(), NULL, 16);
+    DEBUG_PRINT("extracted float value from %s = %lld = %f\n", data.c_str(), (long long)longV, floatV);
     value = floatV;
   }
 
@@ -285,9 +288,9 @@ bool TheengsDecoder::checkDeviceMatch(const JsonArray& condition,
         string_to_compare = mac_string.c_str();
 
         if (strstr(cond_str, "revmac@index") != nullptr) {
-          char* reverse_mac_string = (char*)malloc(strlen(string_to_compare) + 1);
-
+          char reverse_mac_string[13]; // 12 bytes + null terminator
           reverse_hex_data(string_to_compare, reverse_mac_string, 12);
+          reverse_mac_string[12] = '\0'; // Ensure null termination
           string_to_compare = reverse_mac_string;
         }
 
@@ -302,9 +305,7 @@ bool TheengsDecoder::checkDeviceMatch(const JsonArray& condition,
                     string_to_compare,
                     cond_index);
 
-        if (strncmp(&cmp_str[cond_index],
-                    string_to_compare,
-                    12) == 0) {
+        if (strncmp(&cmp_str[cond_index], string_to_compare, 12) == 0) {
           match = true;
         } else {
           match = false;
@@ -376,7 +377,8 @@ bool TheengsDecoder::checkDeviceMatch(const JsonArray& condition,
 
 bool TheengsDecoder::checkPropCondition(const JsonArray& prop_condition,
                                         const char* svc_data,
-                                        const char* mfg_data) {
+                                        const char* mfg_data,
+                                        const char* dev_name) {
   int cond_size = prop_condition.size();
   bool cond_met = prop_condition.isNull();
 
@@ -384,7 +386,7 @@ bool TheengsDecoder::checkPropCondition(const JsonArray& prop_condition,
     for (int i = 0; i < cond_size; i += 4) {
       if (prop_condition[i].is<JsonArray>()) {
         DEBUG_PRINT("found nested array\n");
-        cond_met = checkPropCondition(prop_condition[i], svc_data, mfg_data);
+        cond_met = checkPropCondition(prop_condition[i], svc_data, mfg_data, dev_name);
 
         if (++i < cond_size) {
           if (!cond_met && *prop_condition[i].as<const char*>() == '|') {
@@ -437,6 +439,15 @@ bool TheengsDecoder::checkPropCondition(const JsonArray& prop_condition,
 
           cond_met = evaluateDatalength(op, data_len, req_len);
         }
+      } else if (dev_name != nullptr && strstr(prop_condition[i].as<const char*>(), "name") != nullptr) {
+        if (strstr(prop_condition[i + 1].as<const char*>(), "contain") != nullptr) {
+          if (strstr(dev_name, prop_condition[i + 2].as<const char*>()) != nullptr) {
+            cond_met = (strstr(prop_condition[i + 1].as<const char*>(), "not_") != nullptr) ? false : true;
+          } else {
+            cond_met = (strstr(prop_condition[i + 1].as<const char*>(), "not_") != nullptr) ? true : false;
+          }
+        }
+
       } else {
         DEBUG_PRINT("ERROR property condition data source invalid\n");
         return false;
@@ -573,7 +584,13 @@ int TheengsDecoder::decodeBLEJson(JsonObject& jsondata) {
             doc["type"] = "BTN"; // Button
             break;
           case 18:
-            doc["type"] = "AUDIO"; // Button
+            doc["type"] = "AUDIO"; // Audio
+            break;
+          case 19:
+            doc["type"] = "WIND"; // Anemometers
+            break;
+          case 20:
+            doc["type"] = "ENRG"; // Energy
             break;
           case 254:
             doc["type"] = "RMAC"; // random MAC address devices
@@ -652,7 +669,7 @@ int TheengsDecoder::decodeBLEJson(JsonObject& jsondata) {
       for (JsonPair kv : properties) {
         JsonObject prop = kv.value().as<JsonObject>();
 
-        if (checkPropCondition(prop["condition"], svc_data, mfg_data)) {
+        if (checkPropCondition(prop["condition"], svc_data, mfg_data, dev_name)) {
           JsonArray decoder = prop["decoder"];
           if (strstr((const char*)decoder[0], "value_from_hex_data") != nullptr) {
             const char* src = svc_data;
@@ -718,18 +735,18 @@ int TheengsDecoder::decodeBLEJson(JsonObject& jsondata) {
                         temp_val += post_proc[i + 1].as<double>();
                         break;
                       case '%': {
-                        long val = (long)temp_val;
-                        temp_val = val % post_proc[i + 1].as<long>();
+                        long long val = (long long)temp_val;
+                        temp_val = (double)(val % post_proc[i + 1].as<long long>());
                         break;
                       }
                       case '<': {
-                        long val = (long)temp_val;
-                        temp_val = val << post_proc[i + 1].as<unsigned int>();
+                        long long val = (long long)temp_val;
+                        temp_val = (double)(val << post_proc[i + 1].as<unsigned int>());
                         break;
                       }
                       case '>': {
-                        long val = (long)temp_val;
-                        temp_val = val >> post_proc[i + 1].as<unsigned int>();
+                        long long val = (long long)temp_val;
+                        temp_val = (double)(val >> post_proc[i + 1].as<unsigned int>());
                         break;
                       }
                       case '!': {
@@ -739,12 +756,12 @@ int TheengsDecoder::decodeBLEJson(JsonObject& jsondata) {
                       }
                       case '&': {
                         long long val = (long long)temp_val;
-                        temp_val = val & post_proc[i + 1].as<unsigned int>();
+                        temp_val = (double)(val & post_proc[i + 1].as<unsigned int>());
                         break;
                       }
                       case '^': {
                         long long val = (long long)temp_val;
-                        temp_val = val ^ post_proc[i + 1].as<unsigned int>();
+                        temp_val = (double)(val ^ post_proc[i + 1].as<unsigned int>());
                         break;
                       }
                     }
@@ -764,7 +781,7 @@ int TheengsDecoder::decodeBLEJson(JsonObject& jsondata) {
                     }
                   } else if (strncmp(post_proc[i].as<const char*>(), "abs", 3) == 0) {
                     long long val = (long long)temp_val;
-                    temp_val = abs(val);
+                    temp_val = (double)abs(val);
                   } else if (strncmp(post_proc[i].as<const char*>(), "SBBT-dir", 8) == 0) { // "SBBT" decoder specific post_proc
                     if (temp_val < 0) {
                       proc_str = "down";
@@ -926,8 +943,14 @@ int TheengsDecoder::decodeBLEJson(JsonObject& jsondata) {
               ascii += ch;
             }
 
+            // DEBUG_PRINT("PROP: %s\n", prop.as<JsonObject>();
+
             if (ascii != "") {
-              jsondata[sanitizeJsonKey(kv.key().c_str())] = ascii;
+              if (prop.containsKey("is_double")) {
+                jsondata[sanitizeJsonKey(kv.key().c_str())] = std::stod(ascii);
+              } else {
+                jsondata[sanitizeJsonKey(kv.key().c_str())] = ascii;
+              }
             }
 
             success = i_main;
